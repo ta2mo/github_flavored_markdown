@@ -76,9 +76,17 @@ const extensions = blackfriday.EXTENSION_NO_INTRA_EMPHASIS |
 	blackfriday.EXTENSION_SPACE_HEADERS |
 	blackfriday.EXTENSION_NO_EMPTY_LINE_BEFORE_BLOCK
 
+/*
+<blockquote class="embedly-card"><h4><a href="http://www.realforce.co.jp/products/R2TL-US-BK/USV.html">製品 : REALFORCE TKL / R2TL-USV-BK | REALFORCE | 日本製プレミアムキーボードの最高峰</a></h4><p>キースイッチの押しごこちを極限まで追求した独自のキー荷重特性により、他のキースイッチには無いフェザー（羽毛）を押しているかのようなキー入力の気持ち良さを実現しています。 品質管理が徹底された日本の工場で、設計開発から生産まで一貫して対応しています。</p></blockquote>
+<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+*/
+
 // policy for GitHub Flavored Markdown-like sanitization.
 var policy = func() *bluemonday.Policy {
 	p := bluemonday.UGCPolicy()
+	p.AllowAttrs("class").OnElements("blockquote")
+	p.AllowElements("script")
+	p.AllowAttrs("src", "async", "charset").OnElements("script")
 	p.AllowAttrs("class").Matching(bluemonday.SpaceSeparatedTokens).OnElements("div", "span")
 	p.AllowAttrs("class", "name").Matching(bluemonday.SpaceSeparatedTokens).OnElements("a")
 	p.AllowAttrs("rel").Matching(regexp.MustCompile(`^nofollow$`)).OnElements("a")
